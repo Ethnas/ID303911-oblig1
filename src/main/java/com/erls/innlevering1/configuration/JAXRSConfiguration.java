@@ -1,4 +1,4 @@
-package com.erls.innlevering1;
+package com.erls.innlevering1.configuration;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
