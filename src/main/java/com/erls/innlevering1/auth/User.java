@@ -29,9 +29,8 @@ import javax.validation.constraints.Email;
 
 
 /**
- * A user of the system. Bound to the authentication system
+ * Represents an user in the Fant webstore
  *
- * @author mikael
  */
 @Entity @Table(name = "AUSER")
 @NamedQuery(name = FIND_ALL_USERS, query = "select u from User u order by u.firstName")

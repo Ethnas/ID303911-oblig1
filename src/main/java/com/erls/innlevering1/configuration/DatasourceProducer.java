@@ -16,7 +16,7 @@ import static com.erls.innlevering1.configuration.DatasourceProducer.JNDI_NAME;
 @DataSourceDefinition(
     name = JNDI_NAME,
     className = "org.h2.jdbcx.JdbcDataSource",
-    url = "jdbc:h2:~/chat.db")
+    url = "jdbc:h2:~/fant.db")
 public class DatasourceProducer {
     public static final String JNDI_NAME =  "java:app/jdbc/default";
 

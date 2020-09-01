@@ -188,7 +188,7 @@ public class AuthenticationService {
         }
     }
 
-    public User createUser(String uid, String pwd, String firstName, String lastName) {
+    public User createUser(String uid, String pwd, String firstName, String lastName, String email) {
         User user = em.find(User.class, uid);
         if (user != null) {
             log.log(Level.INFO, "user already exists {0}", uid);
@@ -216,80 +216,6 @@ public class AuthenticationService {
     @Produces(MediaType.APPLICATION_JSON)
     public User getCurrentUser() {
         return em.find(User.class, principal.getName());
-    }
-
-    /**
-     *
-     * @param uid
-     * @param role
-     * @return
-     */
-    @PUT
-    @Path("addrole")
-    @RolesAllowed(value = {Group.ADMIN})
-    public Response addRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
-        if (!roleExists(role)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        try (Connection c = dataSource.getConnection();
-             PreparedStatement psg = c.prepareStatement(INSERT_USERGROUP)) {
-            psg.setString(1, role);
-            psg.setString(2, uid);
-            psg.executeUpdate();
-        } catch (SQLException ex) {
-            log.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        return Response.ok().build();
-    }
-
-    /**
-     *
-     * @param role
-     * @return
-     */
-    private boolean roleExists(String role) {
-        boolean result = false;
-
-        if (role != null) {
-            switch (role) {
-                case Group.ADMIN:
-                case Group.USER:
-                    result = true;
-                    break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     *
-     * @param uid
-     * @param role
-     * @return
-     */
-    @PUT
-    @Path("removerole")
-    @RolesAllowed(value = {Group.ADMIN})
-    public Response removeRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
-        if (!roleExists(role)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
-
-        try (Connection c = dataSource.getConnection();
-                PreparedStatement psg = c.prepareStatement(DELETE_USERGROUP)) {
-            psg.setString(1, role);
-            psg.setString(2, uid);
-            psg.executeUpdate();
-        } catch (SQLException ex) {
-            log.log(Level.SEVERE, null, ex);
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        return Response.ok().build();
     }
 
     /**
