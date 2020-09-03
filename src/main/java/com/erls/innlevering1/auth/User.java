@@ -25,7 +25,12 @@ import javax.persistence.Temporal;
 import javax.persistence.Version;
 import static com.erls.innlevering1.auth.User.FIND_ALL_USERS;
 import static com.erls.innlevering1.auth.User.FIND_USER_BY_IDS;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -33,6 +38,7 @@ import javax.validation.constraints.Email;
  *
  */
 @Entity @Table(name = "AUSER")
+@Data @AllArgsConstructor @NoArgsConstructor
 @NamedQuery(name = FIND_ALL_USERS, query = "select u from User u order by u.firstName")
 @NamedQuery(name = FIND_USER_BY_IDS, query = "select u from User u where u.userid in :ids")
 public class User implements Serializable {
@@ -44,9 +50,6 @@ public class User implements Serializable {
 
     @JsonbTransient
     String password;
-    
-    @Email
-    String email;
 
     @Version
     Timestamp version;
@@ -58,6 +61,7 @@ public class User implements Serializable {
     @JoinTable(name="AUSERGROUP",
             joinColumns = @JoinColumn(name="userid", referencedColumnName = "userid"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
+    List<Group> groups;
             
     String firstName;
     String middleName;
@@ -75,5 +79,11 @@ public class User implements Serializable {
     protected void onCreate() {
         created = new Date();
     }
-    
+
+    public List<Group> getGroups() {
+        if(groups == null) {
+            groups = new ArrayList<>();
+        }
+        return groups;
+    }
 }

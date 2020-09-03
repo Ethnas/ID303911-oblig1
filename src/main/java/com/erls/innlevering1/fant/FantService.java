@@ -42,6 +42,7 @@ import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import com.erls.innlevering1.domain.Item;
 
 /**
  * REST service class to be used by the UI
@@ -63,7 +64,7 @@ public class FantService {
      * Public method that returns items with photos sold in the shop
      */
     public List<Item> getItems() {
-        
+        return new ArrayList<Item>();
     }
     
     /**
@@ -73,7 +74,7 @@ public class FantService {
      * @return result of purchase request
      */
     public Response purchase(Long itemid) {
-    
+        return null;
     }
     
     /**
@@ -85,7 +86,7 @@ public class FantService {
      * @return result of delete request
      */
     public Response delete(Long itemid) {
-        
+        return null;
     }
     
     /**
@@ -99,7 +100,7 @@ public class FantService {
      */
     public Response addItem(String title, String description, BigDecimal price,
             FormDataMultiPart photos) {
-    
+        return null;
     }
     
     /**
@@ -113,6 +114,6 @@ public class FantService {
      * @return the image in original format or in jpeg if scaled
      */
     public Response getPhoto(String name, int width) {
-        
+        return null;
     }
 }
