@@ -38,24 +38,9 @@ public class Photo extends AbstractDomain{
     
     @JoinColumn(name = "owner", referencedColumnName = "id", nullable = true)
     @ManyToOne
-    private User owner;
+    private Item owner;
     
-    protected Photo() {
-        super();
+    public Photo() {
     }
     
-    public Photo(long id, User owner) {
-        this();
-        this.id = id;
-        this.owner = owner;
-    }
-
-    public Photo(long id, User owner, String name, long fileSize, String mimetype) {
-        this();
-        this.id = id;
-        this.owner = owner;
-        this.name = name;
-        this.fileSize = fileSize;
-        this.mimeType = mimetype;
-    }
 }
