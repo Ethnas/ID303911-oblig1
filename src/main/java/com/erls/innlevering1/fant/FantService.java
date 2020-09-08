@@ -34,6 +34,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.StreamingOutput;
+
+import com.erls.innlevering1.response.ErrorMessage;
+import com.erls.innlevering1.response.ErrorResponse;
 import net.coobird.thumbnailator.Thumbnails;
 import com.erls.innlevering1.auth.AuthenticationService;
 import java.math.BigDecimal;
@@ -43,6 +46,11 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import com.erls.innlevering1.domain.Item;
+import javax.security.enterprise.identitystore.IdentityStoreHandler;
+import javax.ws.rs.HeaderParam;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import javax.ws.rs.core.Response.ResponseBuilder;
+
 
 /**
  * REST service class to be used by the UI
@@ -50,9 +58,23 @@ import com.erls.innlevering1.domain.Item;
  */
 @Path("fant")
 @Stateless
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class FantService {
+    
+    private final String PHOTO_PATH = "photos/items/";
+    @Inject
+    IdentityStoreHandler identityStoreHandler;
+    
+    @Inject
+    @ConfigProperty(name = "mp.jwr.verify.issuer", defaultValue = "issuer")
+    String issuer;
+    
     @Inject
     AuthenticationService authService;
+    
+    @Inject
+    JsonWebToken tk;
     
     @Context
     SecurityContext sc;
@@ -70,11 +92,22 @@ public class FantService {
     /**
      * A registered user may purchase an Item. An email will be sent to the
      * seller if the purchase is successful
-     * @param itemid unique id for item 
+     * @param itemId unique id for item
      * @return result of purchase request
      */
-    public Response purchase(Long itemid) {
-        return null;
+    @POST
+    @Path("buyitem")
+    @RolesAllowed(value = { Group.USER, Group.ADMIN })
+    public Response purchaseItem(@HeaderParam("id") Long itemId) {
+        ResponseBuilder resp = null;
+        User buyer = authService.getCurrentUser();
+        Item item = em.find(Item.class, itemId);
+        if (item == null) {
+            ErrorMessage message = new ErrorMessage("No item");
+            resp = Response.ok(new ErrorResponse(message));
+        } else if (!(item.getSeller().getId().equals(byer.getId()))) {
+            item.set
+        }
     }
     
     /**
