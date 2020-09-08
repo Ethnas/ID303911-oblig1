@@ -199,7 +199,7 @@ public class AuthenticationService {
             user.setPassword(hasher.generate(pwd.toCharArray()));
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setMail(email);
+            user.setEmail(email);
             Group usergroup = em.find(Group.class, Group.USER);
             user.getGroups().add(usergroup);
             return em.merge(user);

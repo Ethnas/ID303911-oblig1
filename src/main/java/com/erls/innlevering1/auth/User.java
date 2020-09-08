@@ -45,6 +45,10 @@ public class User implements Serializable {
     public static final String FIND_USER_BY_IDS = "User.findUserByIds";
     public static final String FIND_ALL_USERS = "User.findAllUsers";
     
+    public enum State {
+        ACTIVE, INACTIVE
+    }
+    
     @Id
     String userid;
 
@@ -56,6 +60,9 @@ public class User implements Serializable {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
+    
+    @Enumerated(EnumType.STRING)
+    State currentState = State.ACTIVE;
 
     @ManyToMany
     @JoinTable(name="AUSERGROUP",
@@ -67,7 +74,7 @@ public class User implements Serializable {
     String middleName;
     String lastName;
     String phoneNumber;
-    String mail;
+    String email;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "auser_properties", joinColumns=@JoinColumn(name="userid"))
