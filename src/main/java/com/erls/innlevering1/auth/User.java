@@ -74,6 +74,8 @@ public class User implements Serializable {
     String middleName;
     String lastName;
     String phoneNumber;
+    
+    @Email
     String email;
 
     @ElementCollection(fetch = FetchType.LAZY)
