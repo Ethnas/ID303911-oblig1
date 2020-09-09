@@ -30,7 +30,7 @@ import io.jsonwebtoken.security.Keys;
  * @author mikael
  */
 @ApplicationScoped
-@Path("publickey.pem")
+@Path("/publickey.pem")
 public class KeyService {
     private static final String KEYPAIR_FILENAME = "jwtkeys.ser";
     

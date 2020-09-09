@@ -62,7 +62,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
  * 
  * @author mikael
  */
-@Path("auth")
+@Path("/auth")
 @Stateless
 @Log
 public class AuthenticationService {

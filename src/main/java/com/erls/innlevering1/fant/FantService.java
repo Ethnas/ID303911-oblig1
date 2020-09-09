@@ -59,7 +59,7 @@ import org.glassfish.jersey.media.multipart.BodyPart;
  * REST service class to be used by the UI
  * @author Erlend
  */
-@Path("fant")
+@Path("/fant")
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
