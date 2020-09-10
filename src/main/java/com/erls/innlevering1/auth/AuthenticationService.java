@@ -170,7 +170,7 @@ public class AuthenticationService {
      * @return
      */
     @POST
-    @Path("create")
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(@QueryParam("uid") String uid, @QueryParam("pwd") String pwd) {
         User user = em.find(User.class, uid);
