@@ -188,6 +188,7 @@ public class AuthenticationService {
         }
     }
 
+    /**
     public User createUser(String uid, String pwd, String firstName, String lastName, String email) {
         User user = em.find(User.class, uid);
         if (user != null) {
@@ -205,7 +206,7 @@ public class AuthenticationService {
             return em.merge(user);
         }        
     }
-
+**/
     
     /**
      *
