@@ -36,7 +36,6 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.InvalidKeyException;
 import javax.annotation.Resource;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import com.erls.innlevering1.configuration.DatasourceProducer;
 
