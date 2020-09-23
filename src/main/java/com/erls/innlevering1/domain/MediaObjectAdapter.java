@@ -10,16 +10,16 @@ import javax.json.bind.adapter.JsonbAdapter;
  *
  * @author mikael
  */
-public class MediaObjectAdapter implements JsonbAdapter<List<Photo>, JsonArray> {
+public class MediaObjectAdapter implements JsonbAdapter<List<MediaObject>, JsonArray> {
     @Override
-    public JsonArray adaptToJson(List<Photo> mos) throws Exception {
+    public JsonArray adaptToJson(List<MediaObject> mos) throws Exception {
         JsonArrayBuilder result = Json.createArrayBuilder();
         mos.forEach(mo -> result.add(mo.getId()));
         return result.build();
     }
 
     @Override
-    public List<Photo> adaptFromJson(JsonArray mediaid) throws Exception {
+    public List<MediaObject> adaptFromJson(JsonArray mediaid) throws Exception {
         return null;
     }
 }

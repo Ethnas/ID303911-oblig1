@@ -3,7 +3,6 @@ package com.erls.innlevering1.domain;
 import com.erls.innlevering1.auth.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
 
 import javax.json.bind.annotation.JsonbTypeAdapter;
 import javax.persistence.CascadeType;
@@ -60,7 +59,7 @@ public class Item extends AbstractDomain{
     
     @JsonbTypeAdapter(MediaObjectAdapter.class)
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Photo> photo;
+    private MediaObject photo;
     
     private boolean sold;
     

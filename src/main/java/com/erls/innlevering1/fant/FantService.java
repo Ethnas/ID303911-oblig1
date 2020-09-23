@@ -2,7 +2,6 @@ package com.erls.innlevering1.fant;
 
 import com.erls.innlevering1.auth.Group;
 import com.erls.innlevering1.auth.User;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -35,24 +34,19 @@ import com.erls.innlevering1.auth.AuthenticationService;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import com.erls.innlevering1.domain.Item;
-import com.erls.innlevering1.domain.Photo;
+import com.erls.innlevering1.domain.MediaObject;
 import com.erls.innlevering1.mail.JavaxMail;
 import com.erls.innlevering1.response.DataResponse;
-import java.io.File;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import javax.activation.DataHandler;
 import javax.persistence.TypedQuery;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
-import javax.ws.rs.core.MultivaluedMap;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
-import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 
 /**
@@ -203,17 +197,26 @@ public class FantService {
     @Path("/additem")
     @Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
     @RolesAllowed({ Group.USER, Group.ADMIN })
-    public Response addItem(@HeaderParam("title") String title, @HeaderParam("description") String description, 
-            @HeaderParam("price") float price, FormDataMultiPart multiPartData, @Context HttpServletRequest request) {
+    public Response addItem(@FormDataParam("title") String title, @FormDataParam("description") String description, 
+            @FormDataParam("price") float price, FormDataMultiPart multiPart) {
         ResponseBuilder resp;
         try {
             User user = authService.getCurrentUser();
             Item item = new Item(title, description, price, user);
-            Set<Photo> photos = saveImages(multiPartData);
-            for (Photo photo : photos) {
-                photo.setOwner(item);
+            List<FormDataBodyPart> images = multiPart.getFields("image");
+            if(images != null) {
+                for(FormDataBodyPart part : images) {
+                    InputStream is = part.getEntityAs(InputStream.class);
+                    ContentDisposition meta = part.getContentDisposition();            
+
+                    String pid = UUID.randomUUID().toString();
+                    Files.copy(is, Paths.get(getPhotoPath(),pid));
+
+                    MediaObject photo = new MediaObject(pid, user,meta.getFileName(),meta.getSize(),meta.getType());
+                    em.persist(photo);
+                    item.setPhoto(photo);
+                }
             }
-            item.setPhoto(photos);
             em.persist(item);
             resp = Response.ok(new DataResponse().getResponse());
         } catch (Exception e) {
@@ -223,67 +226,7 @@ public class FantService {
         return resp.build();
     }
     
-    private Set<Photo> saveImages(FormDataMultiPart multiPartData) {
-
-		List<BodyPart> attachments = multiPartData.getBodyParts();
-		InputStream stream = null;
-		Set<Photo> photos = new HashSet<>();
-
-		File directory = new File(PHOTO_PATH);
-		if (!directory.exists()) {
-			directory.mkdirs();
-		}
-		for (Iterator<BodyPart> it = attachments.iterator(); it.hasNext();) {
-			try {
-				BodyPart attachment = it.next();
-				if (attachment == null) {
-					continue;
-				}
-				DataHandler dataHandler = attachment.getEntityAs(DataHandler.class);
-				stream = dataHandler.getInputStream();
-
-				MultivaluedMap<String, String> map = attachment.getHeaders();
-
-				String fileName = null;
-				String formElementName = null;
-				String[] contentDisposition = map.getFirst("Content-Disposition").split(";");
-
-				for (String tempName : contentDisposition) {
-					try {
-						String[] names = tempName.split("=");
-						formElementName = names[1].trim().replaceAll("\"", "");
-						if ((tempName.trim().startsWith("filename"))) {
-							fileName = formElementName;
-						}
-					} catch (Exception e) {
-						continue;
-					}
-				}
-				if (fileName != null) {
-					String pid = UUID.randomUUID().toString();
-					String newName = pid + "-" + fileName.trim();
-					String fullFileName = PHOTO_PATH + newName;
-					MediaType mediatype = attachment.getEntityAs(MediaType.class);
-                                        Photo photo = new Photo();
-
-					long size = Files.copy(stream, Paths.get(fullFileName));
-					photo.setName(newName);
-					photo.setMimeType(mediatype.toString());
-					photo.setFileSize(size);
-					photos.add(photo);
-
-				}
-				if (stream != null) {
-					System.out.println("Closing stream");
-					stream.close();
-				}
-
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		return photos;
-	}
+   
     
     /**
 	 * Returns an item with given id, if it is found. Else return nothing, with
@@ -325,7 +268,7 @@ public class FantService {
     @Produces("image/jpeg")
     public Response getPhoto(@PathParam("name") String name, 
             @PathParam("width") int width) {
-        if(em.find(Photo.class, name) != null) {
+        if(em.find(MediaObject.class, name) != null) {
             StreamingOutput result = (OutputStream os) -> {
                 java.nio.file.Path image = Paths.get(getPhotoPath(),name);
                 if(width == 0) {
