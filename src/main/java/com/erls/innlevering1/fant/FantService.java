@@ -97,7 +97,7 @@ public class FantService {
      * @return result of getItem request.
      */
     @GET
-    @Path("getItems")
+    @Path("/getItems")
     public Response getItems(@QueryParam("page") int page) {
         ResponseBuilder resp;
         try {
@@ -133,7 +133,7 @@ public class FantService {
      * @return result of purchase request
      */
     @POST
-    @Path("buyitem")
+    @Path("/buyitem")
     @RolesAllowed(value = { Group.USER, Group.ADMIN })
     public Response purchaseItem(@HeaderParam("id") Long itemId) {
         ResponseBuilder resp = null;
@@ -167,7 +167,7 @@ public class FantService {
      * @return result of delete request
      */
     @DELETE
-    @Path("deleteitem")
+    @Path("/deleteitem")
     @RolesAllowed(value = { Group.USER, Group.ADMIN })
     public Response deleteItem(@HeaderParam("itemId") Long itemid) {
         ResponseBuilder resp;
@@ -200,7 +200,7 @@ public class FantService {
      * the new unique ids of the Item and associated Photos
      */
     @POST
-    @Path("additem")
+    @Path("/additem")
     @Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
     @RolesAllowed({ Group.USER, Group.ADMIN })
     public Response addItem(@HeaderParam("title") String title, @HeaderParam("description") String description, 
@@ -293,7 +293,7 @@ public class FantService {
 	 * @return return Response
 	 */
 	@GET
-	@Path("getitem")
+	@Path("/getitem")
 	public Response getItem(@QueryParam("id") Integer id) {
 		ResponseBuilder resp;
 		Item item = em.find(Item.class, Long.valueOf(id));
@@ -321,7 +321,7 @@ public class FantService {
      * @return the image in original format or in jpeg if scaled
      */
     @GET
-    @Path("image/{name}")
+    @Path("/image/{name}")
     @Produces("image/jpeg")
     public Response getPhoto(@PathParam("name") String name, 
             @PathParam("width") int width) {

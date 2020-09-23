@@ -109,7 +109,7 @@ public class AuthenticationService {
      * @return
      */
     @GET
-    @Path("login")
+    @Path("/login")
     public Response login(
             @QueryParam("uid") @NotBlank String uid,
             @QueryParam("pwd") @NotBlank String pwd,
