@@ -37,8 +37,14 @@ import com.erls.innlevering1.domain.Item;
 import com.erls.innlevering1.domain.MediaObject;
 import com.erls.innlevering1.mail.JavaxMail;
 import com.erls.innlevering1.response.DataResponse;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.TypedQuery;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.HeaderParam;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -196,6 +202,7 @@ public class FantService {
     @POST
     @Path("/additem")
     @Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({ Group.USER, Group.ADMIN })
     public Response addItem(@FormDataParam("title") String title, @FormDataParam("description") String description, 
             @FormDataParam("price") float price, FormDataMultiPart multiPart) {
@@ -214,13 +221,16 @@ public class FantService {
 
                     MediaObject photo = new MediaObject(pid, user,meta.getFileName(),meta.getSize(),meta.getType());
                     em.persist(photo);
-                    item.setPhoto(photo);
+                    item.addPhoto(photo);
                 }
             }
             em.persist(item);
             resp = Response.ok(new DataResponse().getResponse());
         } catch (Exception e) {
-            resp = Response.ok(new ErrorResponse(new ErrorMessage("Could not store item")).getResponse());
+            ConstraintViolationException cv = (ConstraintViolationException) e;
+            cv.getConstraintViolations().forEach(err->
+                    Logger.getLogger(FantService.class.getName()).log(Level.SEVERE, err.toString()));
+            resp = Response.serverError();
         }
         
         return resp.build();

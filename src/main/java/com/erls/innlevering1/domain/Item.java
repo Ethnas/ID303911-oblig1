@@ -3,9 +3,13 @@ package com.erls.innlevering1.domain;
 import com.erls.innlevering1.auth.User;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.json.bind.annotation.JsonbTypeAdapter;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -13,12 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.validation.constraints.NotNull;
+import javax.persistence.PrePersist;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import lombok.Data;
@@ -45,29 +49,36 @@ public class Item extends AbstractDomain{
     private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
     @PositiveOrZero
+    @Column(name = "price")
     private float price;
     
-    @NotNull
-    @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters.")
+    //@NotEmpty
+    @Column(name = "name")
     private String name;
     
+    @Column(name = "description")
     private String description;
     
     @JsonbTypeAdapter(MediaObjectAdapter.class)
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private MediaObject photo;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<MediaObject> photos;
     
     private boolean sold;
     
+    @Column(name = "created_time", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
-    private LocalDateTime created;
+    private Date created;
+    //private LocalDateTime created;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private LocalDateTime updated;
+    @PrePersist
+    protected void onCreate() {
+        this.created = new Date();
+    }
     
     @OneToOne
     @JoinColumn(name = "seller", referencedColumnName = "id", nullable = true)
@@ -87,10 +98,14 @@ public class Item extends AbstractDomain{
         this.seller = seller;
     }
     
-    @PrePersist
-    protected void onCreate() {
-        this.created = LocalDateTime.now();
-        this.updated = LocalDateTime.now();
+    public void addPhoto(MediaObject photo) {
+        if(this.photos == null) {
+            this.photos = new ArrayList<>();
+        }
+        
+        this.photos.add(photo);
     }
+    
+
     
 }

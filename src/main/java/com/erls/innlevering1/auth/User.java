@@ -39,8 +39,8 @@ import lombok.NoArgsConstructor;
  */
 @Entity @Table(name = "AUSER")
 @Data @AllArgsConstructor @NoArgsConstructor
-@NamedQuery(name = FIND_ALL_USERS, query = "select u from User u order by u.firstName")
-@NamedQuery(name = FIND_USER_BY_IDS, query = "select u from User u where u.userid in :ids")
+@NamedQuery(name = User.FIND_ALL_USERS, query = "select u from User u order by u.firstName")
+@NamedQuery(name = User.FIND_USER_BY_IDS, query = "select u from User u where u.userid in :ids")
 public class User implements Serializable {
     public static final String FIND_USER_BY_IDS = "User.findUserByIds";
     public static final String FIND_ALL_USERS = "User.findAllUsers";
@@ -50,6 +50,7 @@ public class User implements Serializable {
     }
     
     @Id
+    @Column(name = "id")
     String userid;
 
     @JsonbTransient
@@ -58,6 +59,7 @@ public class User implements Serializable {
     @Version
     Timestamp version;
 
+    @Column(name = "created_date")
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
     
@@ -69,10 +71,14 @@ public class User implements Serializable {
             joinColumns = @JoinColumn(name="userid", referencedColumnName = "userid"),
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     List<Group> groups;
-            
+    
+    @Column(name = "first_name")
     String firstName;
-    String middleName;
+    
+    @Column(name = "last_name")
     String lastName;
+    
+    @Column(name = "phone_number")
     String phoneNumber;
     
     @Email
