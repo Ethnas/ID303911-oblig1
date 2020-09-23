@@ -23,8 +23,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Version;
-import static com.erls.innlevering1.auth.User.FIND_ALL_USERS;
-import static com.erls.innlevering1.auth.User.FIND_USER_BY_IDS;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.Email;
@@ -50,7 +48,7 @@ public class User implements Serializable {
     }
     
     @Id
-    @Column(name = "id")
+    @Column(name = "ID")
     String userid;
 
     @JsonbTransient
@@ -59,7 +57,7 @@ public class User implements Serializable {
     @Version
     Timestamp version;
 
-    @Column(name = "created_date")
+    @Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
     
@@ -72,13 +70,13 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     List<Group> groups;
     
-    @Column(name = "first_name")
+    @Column(name = "FIRST_NAME")
     String firstName;
     
-    @Column(name = "last_name")
+    @Column(name = "LAST_NAME")
     String lastName;
     
-    @Column(name = "phone_number")
+    @Column(name = "PHONE_NUMBER")
     String phoneNumber;
     
     @Email

@@ -227,9 +227,14 @@ public class FantService {
             em.persist(item);
             resp = Response.ok(new DataResponse().getResponse());
         } catch (Exception e) {
-            ConstraintViolationException cv = (ConstraintViolationException) e;
-            cv.getConstraintViolations().forEach(err->
+            if(e.getClass().equals(ConstraintViolationException.class)) {
+                ConstraintViolationException cv = (ConstraintViolationException) e;
+                cv.getConstraintViolations().forEach(err->
                     Logger.getLogger(FantService.class.getName()).log(Level.SEVERE, err.toString()));
+            }
+            else {
+                Logger.getLogger(FantService.class.getName()).log(Level.SEVERE, null, e);
+            }
             resp = Response.serverError();
         }
         

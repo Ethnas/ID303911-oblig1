@@ -2,7 +2,7 @@ package com.erls.innlevering1.domain;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
@@ -20,10 +20,10 @@ public abstract class AbstractDomain implements Serializable {
     Timestamp version;
     
     @Column(nullable = false, updatable = false)
-    final private LocalDateTime created;
+    final private Date created;
     
     public AbstractDomain() {
-        this.created = LocalDateTime.now();
+        this.created = new Date();
         this.version = new Timestamp(System.currentTimeMillis());
     }
 
@@ -36,7 +36,7 @@ public abstract class AbstractDomain implements Serializable {
         return version;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 }

@@ -73,6 +73,9 @@ public class AuthenticationService {
 
     @Inject
     KeyService keyService;
+    
+    @Context
+    SecurityContext sc;
 
     @Inject
     IdentityStoreHandler identityStoreHandler;
@@ -218,7 +221,7 @@ public class AuthenticationService {
     @RolesAllowed(value = {Group.USER})
     @Produces(MediaType.APPLICATION_JSON)
     public User getCurrentUser() {
-        return em.find(User.class, principal.getName());
+        return em.find(User.class, sc.getUserPrincipal().getName());
     }
     /**
      *

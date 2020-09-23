@@ -1,8 +1,6 @@
 package com.erls.innlevering1.domain;
 
 import com.erls.innlevering1.auth.User;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.PrePersist;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -46,7 +42,6 @@ public class Item extends AbstractDomain{
     public static final String DELETE_BY_ID = "Item.DeleteById";
     public static final String GET_ALL_DESC = "Item.GetPaginatedItems";
     public static final String COUNT_TOTAL_ITEMS = "Item.CountTotalItems";
-    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
     
     @Id
     @Column(name = "id", nullable = false)
@@ -73,7 +68,6 @@ public class Item extends AbstractDomain{
     @Column(name = "created_time", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date created;
-    //private LocalDateTime created;
     
     @PrePersist
     protected void onCreate() {
