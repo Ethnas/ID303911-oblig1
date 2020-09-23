@@ -48,7 +48,7 @@ public class User implements Serializable {
     }
     
     @Id
-    @Column(name = "ID")
+    //@Column(name = "ID")
     String userid;
 
     @JsonbTransient
@@ -57,7 +57,7 @@ public class User implements Serializable {
     @Version
     Timestamp version;
 
-    @Column(name = "CREATED_DATE")
+    //@Column(name = "CREATED_DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     Date created;
     
@@ -70,24 +70,25 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name="name",referencedColumnName = "name"))
     List<Group> groups;
     
-    @Column(name = "FIRST_NAME")
+    //@Column(name = "FIRST_NAME")
     String firstName;
     
-    @Column(name = "LAST_NAME")
+    //@Column(name = "LAST_NAME")
     String lastName;
     
-    @Column(name = "PHONE_NUMBER")
+    //@Column(name = "PHONE_NUMBER")
     String phoneNumber;
     
     @Email
     String email;
 
+    /**
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "auser_properties", joinColumns=@JoinColumn(name="userid"))
     @MapKeyColumn(name="key")
     @Column(name = "value")
     Map<String,String> properties = new HashMap<>();
-
+**/
     @PrePersist
     protected void onCreate() {
         created = new Date();
