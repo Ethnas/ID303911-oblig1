@@ -37,7 +37,6 @@ import com.erls.innlevering1.domain.Item;
 import com.erls.innlevering1.domain.MediaObject;
 import com.erls.innlevering1.mail.JavaxMail;
 import com.erls.innlevering1.response.DataResponse;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.TypedQuery;
@@ -53,6 +52,7 @@ import javax.ws.rs.core.Response.Status;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+
 
 
 /**
@@ -236,7 +236,7 @@ public class FantService {
                 Logger.getLogger(FantService.class.getName()).log(Level.SEVERE, null, e);
             }
             resp = Response.serverError();
-        }
+        } 
         
         return resp.build();
     }
