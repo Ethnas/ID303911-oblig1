@@ -174,7 +174,7 @@ public class AuthenticationService {
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(@PathParam("uid") String uid, @PathParam("pwd") String pwd) {
+    public Response createUser(@QueryParam("uid") String uid, @QueryParam("pwd") String pwd) {
         User user = em.find(User.class, uid);
         if (user != null) {
             log.log(Level.INFO, "user already exists {0}", uid);
