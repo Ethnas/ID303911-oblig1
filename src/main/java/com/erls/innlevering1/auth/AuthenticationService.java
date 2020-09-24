@@ -217,7 +217,7 @@ public class AuthenticationService {
      * @return
      */
     @GET
-    @Path("currentuser")    
+    @Path("/currentuser")    
     @RolesAllowed(value = {Group.USER})
     @Produces(MediaType.APPLICATION_JSON)
     public User getCurrentUser() {
@@ -230,7 +230,7 @@ public class AuthenticationService {
      * @return
      */
     @PUT
-    @Path("addrole")
+    @Path("/addrole")
     @RolesAllowed(value = {Group.ADMIN})
     public Response addRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
         if (!roleExists(role)) {
@@ -277,7 +277,7 @@ public class AuthenticationService {
      * @return
      */
     @PUT
-    @Path("removerole")
+    @Path("/removerole")
     @RolesAllowed(value = {Group.ADMIN})
     public Response removeRole(@QueryParam("uid") String uid, @QueryParam("role") String role) {
         if (!roleExists(role)) {
@@ -305,7 +305,7 @@ public class AuthenticationService {
      * @return
      */
     @PUT
-    @Path("changepassword")
+    @Path("/changepassword")
     @RolesAllowed(value = {Group.USER})
     public Response changePassword(@QueryParam("uid") String uid,
             @QueryParam("pwd") String password,
