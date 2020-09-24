@@ -37,18 +37,18 @@ import lombok.NoArgsConstructor;
  */
 @Entity @Table(name = "AUSER")
 @Data @AllArgsConstructor @NoArgsConstructor
-@NamedQuery(name = User.FIND_ALL_USERS, query = "select u from User u order by u.firstName")
-@NamedQuery(name = User.FIND_USER_BY_IDS, query = "select u from User u where u.userid in :ids")
+//@NamedQuery(name = User.FIND_ALL_USERS, query = "select u from User u order by u.firstName")
+//@NamedQuery(name = User.FIND_USER_BY_IDS, query = "select u from User u where u.userid in :ids")
 public class User implements Serializable {
-    public static final String FIND_USER_BY_IDS = "User.findUserByIds";
-    public static final String FIND_ALL_USERS = "User.findAllUsers";
+    //public static final String FIND_USER_BY_IDS = "User.findUserByIds";
+    //public static final String FIND_ALL_USERS = "User.findAllUsers";
     
     public enum State {
         ACTIVE, INACTIVE
     }
     
     @Id
-    //@Column(name = "ID")
+    //@Column(name = "id")
     String userid;
 
     @JsonbTransient
@@ -82,13 +82,13 @@ public class User implements Serializable {
     @Email
     String email;
 
-    /**
+    
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "auser_properties", joinColumns=@JoinColumn(name="userid"))
     @MapKeyColumn(name="key")
     @Column(name = "value")
     Map<String,String> properties = new HashMap<>();
-**/
+
     @PrePersist
     protected void onCreate() {
         created = new Date();
