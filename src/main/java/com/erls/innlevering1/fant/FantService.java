@@ -135,7 +135,7 @@ public class FantService {
     @POST
     @Path("/buyitem")
     @RolesAllowed(value = { Group.USER, Group.ADMIN })
-    public Response purchaseItem(@HeaderParam("id") Long itemId) {
+    public Response purchaseItem(@QueryParam("id") Long itemId) {
         ResponseBuilder resp = null;
         User buyer = authService.getCurrentUser();
         Item item = em.find(Item.class, itemId);

@@ -165,19 +165,20 @@ public class AuthenticationService {
     }
 
     /**
-     * Does an insert into the AUSER and AUSERGROUP tables. It creates a SHA-256
-     * hash of the password and Base64 encodes it before the user is created in
-     * the database. The authentication system will read the AUSER table when
-     * doing an authentication.
+     * Does an insert into the AUSER and AUSERGROUP tables.It creates a SHA-256
+ hash of the password and Base64 encodes it before the user is created in
+ the database. The authentication system will read the AUSER table when
+ doing an authentication.
      *
      * @param uid
      * @param pwd
+     * @param email
      * @return
      */
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(@QueryParam("uid") String uid, @QueryParam("pwd") String pwd) {
+    public Response createUser(@FormParam("uid") String uid, @FormParam("pwd") String pwd, @FormParam("mail") String email) {
         User user = em.find(User.class, uid);
         if (user != null) {
             log.log(Level.INFO, "user already exists {0}", uid);
@@ -186,6 +187,7 @@ public class AuthenticationService {
             user = new User();
             user.setUserid(uid);
             user.setPassword(hasher.generate(pwd.toCharArray()));
+            user.setEmail(email);
             Group usergroup = em.find(Group.class, Group.USER);
             user.getGroups().add(usergroup);
             return Response.ok(em.merge(user)).build();

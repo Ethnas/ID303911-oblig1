@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.json.bind.annotation.JsonbTypeAdapter;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -20,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,19 +44,15 @@ public class Item extends AbstractDomain{
     public static final String COUNT_TOTAL_ITEMS = "Item.CountTotalItems";
     
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
     @PositiveOrZero
-    @Column(name = "price")
     private float price;
     
-    //@NotEmpty
-    @Column(name = "name")
+    @NotEmpty
     private String name;
     
-    @Column(name = "description")
     private String description;
     
     @JsonbTypeAdapter(MediaObjectAdapter.class)
@@ -65,7 +61,6 @@ public class Item extends AbstractDomain{
     
     private boolean sold;
     
-    @Column(name = "created_time", nullable = false)
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date created;
     
@@ -75,11 +70,11 @@ public class Item extends AbstractDomain{
     }
     
     @OneToOne
-    @JoinColumn(name = "seller", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "seller", referencedColumnName = "userid", nullable = true)
     private User seller;
     
     @OneToOne
-    @JoinColumn(name = "buyer", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "buyer", referencedColumnName = "userid", nullable = true)
     private User buyer;
     
     protected Item() {
