@@ -38,14 +38,11 @@ import io.jsonwebtoken.security.InvalidKeyException;
 import javax.annotation.Resource;
 import javax.ws.rs.POST;
 import com.erls.innlevering1.configuration.DatasourceProducer;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.PathParam;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  * Authentication REST service used for login, logout and to register new users
@@ -179,7 +176,7 @@ public class AuthenticationService {
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(@FormParam("uid") String uid, @FormParam("pwd") String pwd, @FormParam("email") String email) {
+    public Response createUser(@QueryParam("uid") String uid, @QueryParam("pwd") String pwd, @QueryParam("email") String email) {
         User user = em.find(User.class, uid);
         if (user != null) {
             log.log(Level.INFO, "user already exists {0}", uid);
