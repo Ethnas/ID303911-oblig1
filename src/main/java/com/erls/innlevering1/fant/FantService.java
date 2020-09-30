@@ -169,7 +169,7 @@ public class FantService {
     @DELETE
     @Path("/deleteitem")
     @RolesAllowed(value = { Group.USER, Group.ADMIN })
-    public Response deleteItem(@HeaderParam("itemId") Long itemid) {
+    public Response deleteItem(@QueryParam("itemId") Long itemid) {
         ResponseBuilder resp;
         try {
             User user = authService.getCurrentUser();
