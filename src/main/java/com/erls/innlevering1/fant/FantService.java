@@ -97,7 +97,7 @@ public class FantService {
      * @return result of getItem request.
      */
     @GET
-    @Path("/getItems")
+    @Path("/getitems")
     public Response getItems(@QueryParam("page") int page) {
         ResponseBuilder resp;
         try {
@@ -132,7 +132,7 @@ public class FantService {
      * @param itemId unique id for item
      * @return result of purchase request
      */
-    @POST
+    @GET
     @Path("/buyitem")
     @RolesAllowed(value = { Group.USER, Group.ADMIN })
     public Response purchaseItem(@QueryParam("id") Long itemId) {
